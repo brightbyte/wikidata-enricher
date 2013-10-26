@@ -13,6 +13,11 @@ directory. Then, put the following into your LocalSettings.php:
 
     require_once( "$IP/extensions/Enricher/Enricher.php" );
 
+You should also enable the InstantCommons feature, so media files from Wikimedia
+Commons can easily be used:
+
+    $wgUseInstantCommons = true;
+
 To associate a wiki page with a data item on wikidata.org, use the dataitem
 parser function like so:
 

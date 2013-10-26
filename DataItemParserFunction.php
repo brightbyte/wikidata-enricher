@@ -12,6 +12,21 @@
 class DataItemParserFunction {
 
 	/**
+	 * @var DataItemLoader
+	 */
+	protected $loader;
+
+	/**
+	 * @var DataItemFormatter
+	 */
+	protected $formatter;
+
+	public function __construct( DataItemLoader $loader, DataItemFormatter $formatter ) {
+		$this->loader = $loader;
+		$this->formatter = $formatter;
+	}
+
+	/**
 	 * Handles the #dataitem parser function.
 	 *
 	 * @see https://www.mediawiki.org/wiki/Manual:Parser_functions
@@ -27,8 +42,14 @@ class DataItemParserFunction {
 		if ( isset( $args[0]) ) {
 			$id = $args[0];
 
-			//TODO: load the data item and render the desired information
-			$wikitext = "Enricher ($id)";
+			try {
+				//TODO: apply caching
+				$item = $this->loader->loadItem( $id );
+
+				$wikitext = $this->formatter->formatItem( $item );
+			} catch ( DataItemLoaderException $ex ) {
+				$wikitext = HTML::element( 'div', array( 'class' => 'error' ), $ex->getMessage() );
+			}
 		} else {
 			$wikitext = 'Missing item ID!'; //TODO: i18n
 		}

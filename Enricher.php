@@ -49,13 +49,17 @@ $wgResourceModules['ext.Enricher.box'] = array(
 	),
 
 	'localBasePath' => $dir,
-	'remoteExtPath' => 'examples/Enricher',
+	'remoteExtPath' => basename( $dir ),
 );
 
 // Register a hook to register a parser hook
 $wgHooks['ParserFirstCallInit'][] = function ( Parser &$parser ) {
-	//TODO: create and inject any service objects needed by DataItemParserFunction
-	$handler = new DataItemParserFunction();
+	global $wgEnricherRepoAPI;
+
+	$handler = new DataItemParserFunction(
+		new DataItemLoader( $wgEnricherRepoAPI ),
+		new DataItemFormatter()
+	);
 
 	$parser->setFunctionHook( 'dataitem', array( $handler, 'evaluate' ) );
 	return true;

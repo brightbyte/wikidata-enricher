@@ -39,6 +39,8 @@ class DataItemParserFunction {
 		$args = func_get_args();
 		array_shift( $args );
 
+		$parser->getOutput()->addModules( array( 'ext.Enricher.box' ) );
+
 		if ( isset( $args[0]) ) {
 			$id = $args[0];
 
